@@ -1,0 +1,30 @@
+margin为负值产生的影响
+对于自身的影响
+当元素不存在width属性或者（width:auto）的时候，负margin会增加元素的宽度
+注意：margin-top为负值不会增加高度，只会产生向上位移，
+		 Margin-bottom为负不会产生位移，会减少自身的供css读取的高度
+对文档流的影响
+元素如果用了margin-left：-20px；毋庸置疑的自身会向左偏移20px和定位（position和relative）有点不一样，在其后面的元素会补位，也就是后面的行内元素会紧贴在此元素的之后，总结，不脱离文档流，不使用float元素是不会破坏页面的文档流
+对浮动元素的影响
+负margin会改变浮动元素的显示位置，即使我的元素写在DOM的后面，我也能让他显示在最前面，圣杯布局，双飞翼布局。。。都是利用这个原理实现的
+对绝对定位影响
+对于绝对定位元素，负margin会基于其绝对定位坐标在偏移，缺点就是你必须知道这个定位元素宽度和高度才能并设置负margin值使其居中浏览器窗口；
+多列等高
+利用margin-bottom为负值会减少css读取元素高度的特性，加上padding-bottom和overflow：hidden，就能做一个未知高度的多列等高布局；虽然设置了内边距，但是外边距抵消掉，所以对于父元素来说，他还是原来的高度，然后父元素在加上overflow：hidden，以最高的高度进行裁切，所以就有了看起来等高
+
+
+
+Margin，padding的顺序都是上右下左顺时针
+Readonly只针对input（text和password）和textarea有效，而disabled对于所有的表单元素有效，包括select，radio，checkbox，button
+getElementById（）方法可返回对拥有指定ID的第一个对象的引用
+在HTML body部分中的JavaScript会在页面加载的时候被执行；
+HTML.head部分的JavaScript会在被调用的时候才执行
+window.onload = function(){ 
+首先获得下拉框的节点对象； var obj = document.getElementById(“obj”);
+1.如何获得当前选中的值？： var value = obj.value; 
+2.如何获得该下拉框所有的option的节点对象 var options = obj.options; //注意：得到的options是一个对象数组 
+3.如何获得第几个option的value值?比如我要获取第一option的value,可以这样： var value1 =options[0].value;
+ 4.如何获得第几个option的文本内容?比如我要获取第一option的文本,可以这样： var text1 = options[0].text; 
+5.如何获得当前选中的option的索引？ var index = obj.selectedIndex;
+ 6.如何获得当前选中的option的文本内容？
+从第2个问题，我们已经获得所有的option的对象数组options了.又从第5个问题，我们获取到了当前选中的option的索引值.所以我们只要同options[index]下标的方法得到当前选中的option了 var selectedText =options[index].text; }
