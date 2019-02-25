@@ -11,10 +11,14 @@
 
 对于隐藏元素我们去获取他们的尺寸方法是：
 
-1.将 `display` 属性设置为 `block`(获取 `offsetHeight` 和 `offsetWidth` 的真实值)                   
+1.将 `display` 属性设置为 `block`(获取 `offsetHeight` 和 `offsetWidth` 的真实值)
+                   
 2.将 `visibility` 设置为 `hidden`
+
 3.将 `position` 设置为 `absolute`
+
 4.获取元素尺寸
+
 5.恢复先前更改的属性
 
 ```
