@@ -9,6 +9,36 @@
 
 ```Function.prototype 或者 Function.arguments...```
 
+ 利用函数具有属性可以被存储任何信息，我们可以利用这个特性来做很多事情；例如：
+  
+  ```
+  //储存函数,利用函数具有属性，而且这些属性能够被存储任何信息
+  let store = {
+    nextId:1,
+    cache:{},
+    add(fn){
+      if(!fn.id && typeof fn =='function'){
+        fn.id=this.nextId++
+        this.cache[fn.id]=fn
+        return true
+      }
+    }
+  }
+  //记忆函数
+  function isPrime(value){
+    if(!isPrime.answers){
+      isPrime.answers = {}
+    }
+    if(!isPrime.answers[value]){
+      console.log(1)
+      return isPrime.answers[value] = value
+    }
+    console.log(3)
+    return isPrime.answers[value]
+  }
+  isPrime(2)
+```
+
 > 2. 函数可以拥有方法
 
 ```Function.prototype.apply() , Function.prototype.call()Function.prototype.bind()...```
@@ -39,6 +69,10 @@ function sum(fn,c){
 sum(add(2,3),4);//9
 ```
 
+我们在给函数传参数的时候，除了有我们显示传入的实参之外，其实还包含了两个隐士参数 `this` 和 `arguments`。`this` 表示被调用函数的上下文(在什么环境下调用，就指向什么）。`arguments` 表示函数调用过程中传递的所有参数
+
+`arguments` 是伪数组，在 `es6` 中有一个剩余参数的概念，剩余参数是一个真正的数组
+
 > 7. 函数可以作为返回值进行返回
 
 ```
@@ -56,8 +90,12 @@ add(2,3)//5
 函数名是指向函数对象的指针。如果没有函数名，我们就称之为匿名函数，匿名函数没有指向函数对象的指针，一般情况下我们会立即执行函数，或者将匿名函数赋值给变量；
 
 函数创建的两种方式：函数声明和函数表达式(匿名函数，拉姆达函数)
+
 <img src="img/sum.png"/>
 
+`JavaScript` 解析器必须能够轻易区分函数声明和函数表达式之间的区别。如果去掉包裹函数表达式的括号，把立即调用作为一个独立语句 `function() {}(3)`，`JavaScript` 开始解析时便会结束，因为这个独立语句以 `function` 开头，那么解析器就会认为它在处理一个函数声明。每个函数声明必须有一个名字（然而这里并没有指定名字），所以程序执行到这里会报错
+
+<img src="img/function5.png"/>
 其中`num1` 和 `num2` 是函数的形参，（形参，形式上的参数）当 `num1`和`num2`作为具体的数据传递给函数时，就是实参，（实参，实际的参数）
 **形参和实参**
 > 如果形参个数大于实参个数，剩下没有对应的形参将赋值为 `undefined`
@@ -177,7 +215,8 @@ sum(add(2,3),4);//9
 递归函数可以非常高效的操作树形结构；
 
 ## 闭包
-一句话概括就是：一个函数能够访问该函数以外的变量就形成了闭包；
+一句话概括就是：一个函数能够访问该函数以外的变量就形成了闭包；（允许函数访问并操作函数外部的变量，`windows` 就是一个最大的闭包（回调函数是另一种常见的使用闭包的情景）
+
 
 **闭包记住的是变量的引用，而不是闭包创建时刻该变量的值**
 
@@ -264,8 +303,10 @@ console.log(private.setnum());
  add(2,4);
  ```
 如果使用非严格模式，this默认指向全局对象（window）;严格模式（strict mode）,则不能将全局对象用于默认绑定，因此this会绑定到undefined;
- > 方法调用
+ 
+> 2.方法调用
  当一个函数被保存为对象的一个属性时，我们称它为一个方法，this被绑定到该对象（也有意外的情况；有时this会丢掉的对象，回调函数会修改this比如引用类型的赋值）
+   ```
    var ninja={
     chirp:function(n){
       return n>1?this.chirp(n-1)*n:1;
@@ -274,7 +315,9 @@ console.log(private.setnum());
   var sarural={chirp:ninja.chirp};
   console.log(sarural.chirp(4));
   ```
-> 构造器调用
+  
+> 3.构造器调用
+
 ```
 function Ninja(a){
     this.a=a;
@@ -289,7 +332,7 @@ ninja.a;
 3. 这个新对象绑定到函数调用的this
 
 4. 如果函数没有返回其他对象，那么new表达式中的函数会自动返回这个新对象
-> `apply()`,`call()`,`bind()`调用模式
+> 4. `apply()`,`call()`,`bind()`调用模式
 `apply()`,`call()`,`bind()` 直接将`this`，绑定成一个固定的值
 
  ```
@@ -315,3 +358,6 @@ tim.getName.apply(jake); // jake
 
 <i>return语句可用来使函数提前返回，当return被执行时，函数立即返回而不再执行余下的语句；</i>
 
+特例： 箭头函数的 `this` 与声明所在的上下文的相同，无论何时在哪调用，只和声明的地方有关系（定义时的函数继承上下文）
+ 问： `var samurai = (() => "Tomoe")();` 和 `var ninja = (() => {"Yoshi"})();` 分别返回什么？
+  <img src="img/arr6.png"/>

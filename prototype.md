@@ -1,6 +1,6 @@
 # 原型与面向对象
 
-对象：属性值的集合，属性可以包括基本值，对象，或者函数
+对象：属性值的集合(属性值可以是简单的值（字符串，数值），也可以是函数或者其他对象)，属性可以包括基本值，对象，或者函数
 
 Object创建的方法：
 >* 1.对象字面量
@@ -55,6 +55,10 @@ var person=new Person("Nice",23);
 
 解决方法：原型模式
 
+原型：每一个对象都含有原型的引用，当查找属性的时候，若对象本身不具有该属性，则会查找原型上是否具有该属性
+
+原型链：每一个对象都具有一个原型，每一个对象的原型也有一个原型，以此类推，形成一个原型链
+
 原型所定义的属性和功能会自动应用到对象的实例上
 
 所有函数在初始化的时候都有一个 `prototype` 属性，该属性的初始值是一个空对象，只有函数在作为构造函数的时候，`prototype` 属性指向原型对象，这个对象包含所有实例共享的属性和方法
@@ -83,6 +87,25 @@ Ninja.prototype={dance:Person.prototype.dance}
 <img src="img/constructor 2.png"/>
 
 造成这个原因是，**实例和原型之间的松散链接关系**，实例中的指针只指向原型，而不指向构造函数（可以看上面，原型，实例，构造函数直接的关系）
+
+对象和函数原型之间的关系是在对象创建的时候建立的
+
+```
+function Nija(){
+ return this.swuing = true
+}
+const nija = new Nija()
+Nija.prototype.swuingSword = function(){
+return this.swuing
+}
+Nija.prototype = {
+ price(){
+    return false
+ }
+}
+const nija1 = new Nija()
+```
+nija1 和 nija 拥有不一样的方法，因为对象和函数原型之间的关系是在对象创建的时候建立的，新创建的对象将引用着新的原型，原来旧的对象保持着原有的原型
 
 但是重设 `constructor` 属性，会导致它的`[[Enumerable]]` 的特性被设为 `true`,最好使用 `Object.defineProperty()`
 
@@ -149,5 +172,5 @@ function Person(name,age){
 var friend=new Person();
 ```
 
+继承是代码复用的一种方式，是将一个对象的属性扩展到另一个对象上。
 
-   
